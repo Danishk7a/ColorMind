@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Palette Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        .color-box {
+            width: 100px;
+            height: 100px;
+            display: inline-block;
+            margin: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>Color Palette Generator</h1>
+    <button id="fetch-colors">Get Colors</button>
+    <div id="color-palette"></div>
+
+ <script>
+    document.getElementById('fetch-colors').addEventListener('click', () => {
+    const url = 'https://cors-anywhere.herokuapp.com/http://colormind.io/api/';
+    const data = JSON.stringify({ model: 'ui' });
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: data,
+    })
+    .then(response => response.json())
+    .then(data => {
+        const colors = data.result;
+        const colorPalette = document.getElementById('color-palette');
+        colorPalette.innerHTML = ''; // Clear previous colors
+
+        colors.forEach(color => {
+            const colorBox = document.createElement('div');
+            colorBox.className = 'color-box';
+            colorBox.style.backgroundColor = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
+            colorPalette.appendChild(colorBox);
+        });
+
+        console.log(colors)
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+});
+
+ </script>
+</body>
+</html>
+
+
